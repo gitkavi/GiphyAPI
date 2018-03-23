@@ -1,3 +1,6 @@
+body{
+    background-color: cornsilk;
+}
 .container{
     width:100%;
     margin: 0 auto;
@@ -5,35 +8,33 @@
 }
 .button-container{
     width:100%;
-    background-color: yellow;
+    height:100px;
 }
 #gif-display{
     display: block;
-    width: 90%;
-    background-color: blue;
+    width: 100%;
+    height:auto;
 }
 #giphy{
     float:left;
 }
 .gifs{
-    width: 100px;
-    height: 100px;
+    width: 300px;
+    height: 200px;
 }
-#buttons-view{
-    float: left;
-    padding:30px;
-}
+
 #form{
-    float: right;
-    padding:30px;
     margin:10px;
 }
 #add-topic{
-    width:80px;
+    width:60%;
     height:40px;
 }
 .topic{
     width:70px;
     height:40px;
     margin:10px;
+}
+hr{
+    border-color: blue;
 }
