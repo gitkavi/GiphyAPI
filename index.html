@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="style.css"></link>
     <title>Giphy API</title>
@@ -37,9 +38,8 @@
 
         function display() {
 
-            console.log("inside display()");
             $("#giphy").empty();
-            
+
             var topicTitle = $(this).attr('data-name');
             var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topicTitle + "&limit=10&g=g&api_key=W4YYTujfEUGtvMkdmBVtQXxLprRO6YtT";
 
@@ -48,26 +48,43 @@
                 method: "GET"
             }).then(function (response) {
                 console.log(response);
-                for ( var i = 0; i<10; i++){
+                for (var i = 0; i < 10; i++) {
                     var imageContainer = $("<div>");
                     imageContainer.attr('class', 'col-md-3 col-sm-3 col-xs-12');
+
                     var rating = $("<p>")
                     rating.text("Rating: " + response.data[i].rating);
+
                     var gif = $("<img>")
-                    gif.attr('class', 'img-responsive gifs');
-                    gif.attr('src', response.data[i].images.original.url);
-                    
+                    gif.attr('class', 'img-responsive');
+                    // gif.attr('id','img'+i);
+                    gif.attr('src', response.data[i].images.original_still.url);
+                    gif.attr('data-still', response.data[i].images.original_still.url);
+                    gif.attr('data-animate', response.data[i].images.original.url)
+                    gif.attr('data-state', 'still');
+
                     imageContainer.append(rating);
                     imageContainer.append(gif);
                     $("#giphy").append(imageContainer);
                 }
-                
+
             });
         }
 
-        function renderButtons() {
+        function animate()
+        {
+            var state = $(this).attr('data-state');
+            if (state == 'still') {
+                $(this).attr('src', $(this).attr('data-animate'));
+                $(this).attr('data-state', 'animate');
+            }
+            if (state == 'animate') {
+                $(this).attr('src', $(this).attr('data-still'));
+                $(this).attr('data-state', 'still');
+            }
+        }
 
-            console.log("inside renderButtons");
+        function renderButtons() {
 
             $("#buttons-view").empty();
 
@@ -78,29 +95,28 @@
                 button.attr('data-name', topics[i]);
                 button.text(topics[i]);
                 $("#buttons-view").append(button);
-            }            
-            
+            }
+
         }
 
-        $("#add-topic").on("click", function(){
+        $("#add-topic").on("click", function () {
             event.preventDefault();
 
             var topic = $("#topic-input").val().trim();
 
-            if(topic === ''){
+            if (topic === '') {
                 return;
             }
 
-            topics.push(topic);   
-            console.log(topics);        
+            topics.push(topic);
             $("#topic-input").val('');
             renderButtons();
         });
 
         $(document).on("click", ".topic", display);
+        $(document).on("click", ".img-responsive", animate);
 
         renderButtons();
-
     </script>
 </body>
 
